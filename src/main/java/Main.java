@@ -26,13 +26,12 @@ public class Main {
         while (running) {
             Thread.sleep(5000);
         }
-
     }
 
     public static void updateRss() {
         System.out.println("updating rss...");
         RssNews rss = new RssNews("http://www.rawstory.com/rs/feed/");
-        List<RssNewsEntry> rssNewsEntries = rss.getRssNewsEntries("a");
+        List<RssNewsEntry> rssNewsEntries = rss.getFilteredRssNewsEntries("a");
 
         for (RssNewsEntry rssNewsEntry : rssNewsEntries) {
             System.out.println(rssNewsEntry.getTitle());

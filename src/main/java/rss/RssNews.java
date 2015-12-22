@@ -10,28 +10,23 @@ import java.util.List;
 
 public class RssNews {
     String rssUrl;
+    List<RssNewsEntry> rssNewsEntires;
 
     public RssNews(String rssUrl) {
         this.rssUrl = rssUrl;
     }
 
-    public List<RssNewsEntry> getRssNewsEntries(String filter) {
+    public List<RssNewsEntry> getRssNewsEntries() {
         try {
             SyndFeed syndFeedForUrl = RomeHelper.getSyndFeedForUrl(rssUrl);
             List<RssNewsEntry> rssNewsEntries = new ArrayList<RssNewsEntry>();
 
             for (Object o : syndFeedForUrl.getEntries()) {
                 SyndEntryImpl entry = (SyndEntryImpl) o;
-
-                if (entry.getTitle().toLowerCase().contains(filter.toLowerCase()) ||
-                        entry.getDescription().getValue().toLowerCase().contains(filter.toLowerCase())) {
-                    RssNewsEntry rssNewsEntry = new RssNewsEntry(entry.getTitle(), entry.getDescription().getValue(), entry.getLink(), entry.getPublishedDate());
-                    rssNewsEntries.add(rssNewsEntry);
-
-                }
-
+                RssNewsEntry rssNewsEntry = new RssNewsEntry(entry.getTitle(), entry.getDescription().getValue(), entry.getLink(), entry.getPublishedDate());
+                rssNewsEntries.add(rssNewsEntry);
             }
-
+            this.rssNewsEntires = rssNewsEntries;
             return rssNewsEntries;
 
         } catch (IOException e) {
@@ -41,6 +36,23 @@ public class RssNews {
         }
 
         return null;
+    }
+
+    public List<RssNewsEntry> getFilteredRssNewsEntries(String filter) {
+        if (rssNewsEntires == null) {
+            this.getRssNewsEntries();
+        }
+
+        List<RssNewsEntry> filteredList = new ArrayList<RssNewsEntry>();
+
+        for (RssNewsEntry entry : rssNewsEntires) {
+            if (entry.getTitle().toLowerCase().contains(filter.toLowerCase()) ||
+                    entry.getDescription().toLowerCase().contains(filter.toLowerCase())) {
+                filteredList.add(entry);
+            }
+        }
+        return filteredList;
+
     }
 
 }
