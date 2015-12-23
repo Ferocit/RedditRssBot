@@ -6,6 +6,7 @@ import net.dean.jraw.fluent.FluentRedditClient;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.Sorting;
+import net.dean.jraw.paginators.SubmissionSearchPaginator;
 import net.dean.jraw.paginators.SubredditPaginator;
 import net.dean.jraw.paginators.TimePeriod;
 import reddit.apiwrapper.RedditClientFactory;
@@ -83,6 +84,13 @@ public class RedditBot {
     private boolean hasEntryBeenPosted(RssNewsEntry rss, NewsConfig newsConfig) {
         System.out.println("Checking " + rss.getLink() + " for duplicates");
 
+        if (hasAlreadyPostedByMe(rss)) return true;
+        if (hasAlreadyPostedBySomeone(rss, newsConfig)) return true;
+
+        return false;
+    }
+
+    private boolean hasAlreadyPostedBySomeone(RssNewsEntry rss, NewsConfig newsConfig) {
         SubredditPaginator paginator = new SubredditPaginator(reddit);
         paginator.setLimit(500);
         paginator.setTimePeriod(TimePeriod.DAY);
@@ -97,7 +105,23 @@ public class RedditBot {
                 }
             }
         }
+        return false;
+    }
 
+    private boolean hasAlreadyPostedByMe(RssNewsEntry rss) {
+        SubmissionSearchPaginator ssp = new SubmissionSearchPaginator(reddit,"author:BelowSubway");
+        ssp.setLimit(500);
+        ssp.setTimePeriod(TimePeriod.WEEK);
+        ssp.setSearchSorting(SubmissionSearchPaginator.SearchSort.NEW);
+
+        while (ssp.hasNext()) {
+            Listing<Submission> userSubmissions = ssp.next();
+            for (Submission sub : userSubmissions) {
+                if (sub.getUrl().equalsIgnoreCase(rss.getLink()) || sub.getTitle().equalsIgnoreCase(rss.getTitle())) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }
