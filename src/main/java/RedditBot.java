@@ -60,7 +60,7 @@ public class RedditBot {
             try {
                 if (!hasEntryBeenPosted(entry, newsConfig)) {
                     fluentReddit.subreddit(newsConfig.getSubreddit()).submit(new URL(entry.getLink()), entry.getTitle());
-                    System.out.println("Posted: " + entry.getTitle());
+                    System.out.println("Posted: " + entry.getTitle() + ". Sleeping for a second.");
                     // Let's sleep a minute, maybe that will be enough to not trigger the posting limit
                     Thread.sleep(60*1000);
                     counter++;
@@ -82,6 +82,7 @@ public class RedditBot {
 
     private boolean hasEntryBeenPosted(RssNewsEntry rss, NewsConfig newsConfig) {
         System.out.println("Checking " + rss.getLink() + " for duplicates");
+
         SubredditPaginator paginator = new SubredditPaginator(reddit);
         paginator.setLimit(500);
         paginator.setTimePeriod(TimePeriod.DAY);
