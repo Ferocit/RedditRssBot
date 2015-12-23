@@ -6,6 +6,7 @@ import com.sun.syndication.io.FeedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RssNews {
@@ -38,7 +39,7 @@ public class RssNews {
         return null;
     }
 
-    public List<RssNewsEntry> getFilteredRssNewsEntries(List<String> filters) {
+    public List<RssNewsEntry> getFilteredRssNewsEntries(List<String> filters, Integer maxAge) {
 
         if (rssNewsEntires == null) {
             this.getRssNewsEntries();
@@ -48,13 +49,33 @@ public class RssNews {
 
         for (String filter : filters) {
             for (RssNewsEntry entry : rssNewsEntires) {
-                if (entry.getTitle().toLowerCase().contains(filter.toLowerCase())) {
-                    filteredList.add(entry);
+                if (!isOlderThanXDays(entry.getPublishedDate(), maxAge)) {
+                    if (entry.getTitle().toLowerCase().contains(filter.toLowerCase())) {
+                        filteredList.add(entry);
+                    }
                 }
             }
         }
         return filteredList;
 
+    }
+
+    private boolean isOlderThanXDays(Date publishedDate, Integer maxAge) {
+        if (maxAge == null) {
+            return false;
+        }
+
+        Date today = new Date();
+        long startTime = publishedDate.getTime();
+        long endTime = today.getTime();
+        long diffTime = endTime - startTime;
+        long diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+        if (diffDays > maxAge) {
+            return true;
+        }
+
+        return false;
     }
 
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <config>
-    <NewsConfig>
+   <NewsConfig>
         <filters>atheis</filters>
         <filters>religion</filters>
-        <filters>evolution</filters>
+        <filters> evolution</filters>
         <filters>muslim</filters>
         <filters>christian</filters>
         <id>Atheism News</id>
@@ -14,6 +14,14 @@
         <filters>fallout</filters>
         <id>Fallout IGN News</id>
         <rssFeedUrl>http://feeds.ign.com/ign/news</rssFeedUrl>
-        <subreddit>games</subreddit>
+        <subreddit>gaming</subreddit>
     </NewsConfig>
+    <NewsConfig>
+        <filters></filters>
+        <id>Rocketbeans Blog</id>
+        <rssFeedUrl>http://www.rocketbeans.tv/blog/feed/</rssFeedUrl>
+        <subreddit>Rocketbeans</subreddit>
+        <maxAge>1</maxAge>
+    </NewsConfig>
+    <!-- News4AtheistsBotTest -->
 </config>

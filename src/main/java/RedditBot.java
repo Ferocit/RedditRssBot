@@ -51,7 +51,7 @@ public class RedditBot {
     public void start() throws ApiException {
         for (NewsConfig newsConfig : config.getNewsConfigs()) {
             RssNews rss = new RssNews(newsConfig.getRssFeedUrl());
-            List<RssNewsEntry> filteredRssNewsEntries = rss.getFilteredRssNewsEntries(newsConfig.getFilters());
+            List<RssNewsEntry> filteredRssNewsEntries = rss.getFilteredRssNewsEntries(newsConfig.getFilters(), newsConfig.getMaxAge());
             postRssNews(filteredRssNewsEntries, newsConfig);
         }
     }
@@ -80,7 +80,7 @@ public class RedditBot {
     private boolean hasLinkBeenPosted(String link, NewsConfig newsConfig) {
         System.out.println("Checking " + link + " for duplicates");
         SubredditPaginator paginator = new SubredditPaginator(reddit);
-        paginator.setLimit(30);
+        paginator.setLimit(500);
         paginator.setTimePeriod(TimePeriod.DAY);
         paginator.setSorting(Sorting.NEW);
         paginator.setSubreddit(newsConfig.getSubreddit());

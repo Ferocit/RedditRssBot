@@ -10,6 +10,16 @@ public class NewsConfig {
     String rssFeedUrl;
     String subreddit;
     List<String> filters;
+    Integer maxAge;
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    @XmlElement
+    public void setMaxAge(Integer maxAge) {
+        this.maxAge = maxAge;
+    }
 
     public String getId() {
         return id;
