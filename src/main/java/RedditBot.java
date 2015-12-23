@@ -57,6 +57,7 @@ public class RedditBot {
     }
 
     private void postRssNews(List<RssNewsEntry> rssNews, NewsConfig newsConfig) {
+        System.out.println("Posting " + newsConfig.getId());
         int counter = 0;
         for (RssNewsEntry entry : rssNews) {
             try {
@@ -77,6 +78,7 @@ public class RedditBot {
     }
 
     private boolean hasLinkBeenPosted(String link, NewsConfig newsConfig) {
+        System.out.println("Checking " + link + " for duplicates");
         SubredditPaginator paginator = new SubredditPaginator(reddit);
         paginator.setLimit(30);
         paginator.setTimePeriod(TimePeriod.DAY);
