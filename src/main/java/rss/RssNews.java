@@ -38,17 +38,20 @@ public class RssNews {
         return null;
     }
 
-    public List<RssNewsEntry> getFilteredRssNewsEntries(String filter) {
+    public List<RssNewsEntry> getFilteredRssNewsEntries(List<String> filters) {
+
         if (rssNewsEntires == null) {
             this.getRssNewsEntries();
         }
 
         List<RssNewsEntry> filteredList = new ArrayList<RssNewsEntry>();
 
-        for (RssNewsEntry entry : rssNewsEntires) {
-            if (entry.getTitle().toLowerCase().contains(filter.toLowerCase()) ||
-                    entry.getDescription().toLowerCase().contains(filter.toLowerCase())) {
-                filteredList.add(entry);
+        for (String filter : filters) {
+            for (RssNewsEntry entry : rssNewsEntires) {
+                if (entry.getTitle().toLowerCase().contains(filter.toLowerCase()) ||
+                        entry.getDescription().toLowerCase().contains(filter.toLowerCase())) {
+                    filteredList.add(entry);
+                }
             }
         }
         return filteredList;

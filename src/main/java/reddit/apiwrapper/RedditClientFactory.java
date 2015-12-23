@@ -17,7 +17,7 @@ import java.util.Properties;
  */
 public class RedditClientFactory {
 
-    public RedditClient authenticate() {
+    public static RedditClient getRedditClient() {
         try {
             Properties properties = getProperties();
 
@@ -35,9 +35,9 @@ public class RedditClientFactory {
         return null;
     }
 
-    private Properties getProperties() throws IOException {
+    private static Properties getProperties() throws IOException {
         Properties properties = new Properties();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials.properties");
+        InputStream inputStream = RedditClientFactory.class.getClassLoader().getResourceAsStream("credentials.properties");
         properties.load(inputStream);
         return properties;
     }
