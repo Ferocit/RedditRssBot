@@ -57,11 +57,13 @@ public class RedditBot {
     }
 
     private void postRssNews(List<RssNewsEntry> rssNews, NewsConfig newsConfig) {
+        int counter = 0;
         for (RssNewsEntry entry : rssNews) {
             try {
                 if (!hasLinkBeenPosted(entry.getLink(), newsConfig)) {
                     fluentReddit.subreddit(newsConfig.getSubreddit()).submit(new URL(entry.getLink()), entry.getTitle());
                     System.out.println("Posted: " + entry.getTitle());
+                    counter++;
                 } else {
                     System.out.println("Duplicate found for " + entry.getTitle());
                 }
@@ -71,6 +73,7 @@ public class RedditBot {
                 e.printStackTrace();
             }
         }
+        System.out.println("Done posting " + counter + " new links");
     }
 
     private boolean hasLinkBeenPosted(String link, NewsConfig newsConfig) {
