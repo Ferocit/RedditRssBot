@@ -17,7 +17,7 @@ public class Main {
     public static void main(String [] args) throws IOException, FeedException, InterruptedException, ApiException {
 
         RssNews rss = new RssNews("http://www.rawstory.com/rs/feed/");
-        List<RssNewsEntry> rssNewsEntries = rss.getRssNewsEntries("a");
+        List<RssNewsEntry> rssNewsEntries = rss.getFilteredRssNewsEntries("a");
 
         RedditClientFactory auth = new RedditClientFactory();
         RedditClient reddit = auth.authenticate();
