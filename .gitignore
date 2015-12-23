@@ -1,4 +1,4 @@
-credentials.properties
+/src/main/resources/credentials.properties
 
 ### Java template
 *.class
