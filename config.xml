@@ -10,4 +10,10 @@
         <rssFeedUrl>http://www.rawstory.com/rs/feed/</rssFeedUrl>
         <subreddit>atheism</subreddit>
     </NewsConfig>
+    <NewsConfig>
+        <filters>fallout</filters>
+        <id>Fallout IGN News</id>
+        <rssFeedUrl>http://feeds.ign.com/ign/news</rssFeedUrl>
+        <subreddit>games</subreddit>
+    </NewsConfig>
 </config>
