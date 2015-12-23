@@ -6,8 +6,6 @@ import rss.RssNewsEntry;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Main {
 
@@ -22,11 +20,18 @@ public class Main {
         };
         timer.scheduleAtFixedRate(updateRssTimer, 0, 2*60*1000);
 
+        RedditClientFactory auth = new RedditClientFactory();
+        RedditClient reddit = auth.authenticate();
+
+        FluentRedditClient fluent = new FluentRedditClient(reddit);
+
+        Submission submission = fluent.subreddit("News4AtheistsBotTest").submit("http://www.google.de", "title");
+
+
         boolean running = true;
         while (running) {
             Thread.sleep(5000);
         }
-    }
 
     public static void updateRss() {
         System.out.println("updating rss...");
