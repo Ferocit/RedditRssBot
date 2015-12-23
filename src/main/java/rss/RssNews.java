@@ -48,8 +48,7 @@ public class RssNews {
 
         for (String filter : filters) {
             for (RssNewsEntry entry : rssNewsEntires) {
-                if (entry.getTitle().toLowerCase().contains(filter.toLowerCase()) ||
-                        entry.getDescription().toLowerCase().contains(filter.toLowerCase())) {
+                if (entry.getTitle().toLowerCase().contains(filter.toLowerCase())) {
                     filteredList.add(entry);
                 }
             }
