@@ -20,9 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-/**
- * Created by Mathias on 23.12.2015.
- */
 public class RedditBot {
     RedditClient reddit;
     FluentRedditClient fluentReddit;
@@ -61,24 +58,30 @@ public class RedditBot {
         int counter = 0;
         for (RssNewsEntry entry : rssNews) {
             try {
-                if (!hasLinkBeenPosted(entry.getLink(), newsConfig)) {
+                if (!hasEntryBeenPosted(entry, newsConfig)) {
                     fluentReddit.subreddit(newsConfig.getSubreddit()).submit(new URL(entry.getLink()), entry.getTitle());
                     System.out.println("Posted: " + entry.getTitle());
+                    // Let's sleep a minute, maybe that will be enough to not trigger the posting limit
+                    Thread.sleep(60*1000);
                     counter++;
                 } else {
                     System.out.println("Duplicate found for " + entry.getTitle());
                 }
             } catch (ApiException e) {
                 e.printStackTrace();
+                System.out.println("Aborting...");
+                return;
             } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         System.out.println("Done posting " + counter + " new links");
     }
 
-    private boolean hasLinkBeenPosted(String link, NewsConfig newsConfig) {
-        System.out.println("Checking " + link + " for duplicates");
+    private boolean hasEntryBeenPosted(RssNewsEntry rss, NewsConfig newsConfig) {
+        System.out.println("Checking " + rss.getLink() + " for duplicates");
         SubredditPaginator paginator = new SubredditPaginator(reddit);
         paginator.setLimit(500);
         paginator.setTimePeriod(TimePeriod.DAY);
@@ -88,7 +91,7 @@ public class RedditBot {
         while (paginator.hasNext()) {
             Listing<Submission> submissions = paginator.next();
             for (Submission sub : submissions) {
-                if (sub.getUrl().equalsIgnoreCase(link)) {
+                if (sub.getUrl().equalsIgnoreCase(rss.getLink()) || sub.getTitle().equalsIgnoreCase(rss.getTitle())) {
                     return true;
                 }
             }
