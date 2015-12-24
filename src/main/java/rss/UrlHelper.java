@@ -14,6 +14,13 @@ public class UrlHelper {
 
     public static String getRedirectedUrl(URL url) {
         HttpURLConnection con = null;
+
+        String urlString = url.toString();
+
+        if (!urlString.contains("feedproxy")) {
+            return urlString;
+        }
+
         try {
             con = (HttpURLConnection) url.openConnection();
             con.setInstanceFollowRedirects(false);

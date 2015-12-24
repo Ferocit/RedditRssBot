@@ -64,7 +64,7 @@ public class RssNews {
     }
 
     private boolean isOlderThanXDays(Date publishedDate, Integer maxAge) {
-        if (maxAge == null) {
+        if (maxAge == null || publishedDate == null) {
             return false;
         }
 
