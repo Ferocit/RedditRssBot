@@ -3,12 +3,10 @@ import configuration.NewsConfig;
 import net.dean.jraw.ApiException;
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.fluent.FluentRedditClient;
+import net.dean.jraw.models.Contribution;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
-import net.dean.jraw.paginators.Sorting;
-import net.dean.jraw.paginators.SubmissionSearchPaginator;
-import net.dean.jraw.paginators.SubredditPaginator;
-import net.dean.jraw.paginators.TimePeriod;
+import net.dean.jraw.paginators.*;
 import org.apache.log4j.Logger;
 import reddit.apiwrapper.RedditClientFactory;
 import rss.RssNews;
@@ -109,15 +107,17 @@ public class RedditBot {
     }
 
     private boolean hasAlreadyPostedByMe(RssNewsEntry rss) {
-        SubmissionSearchPaginator ssp = new SubmissionSearchPaginator(reddit,"author:BelowSubway");
-        ssp.setLimit(500);
-        ssp.setTimePeriod(TimePeriod.WEEK);
-        ssp.setSearchSorting(SubmissionSearchPaginator.SearchSort.NEW);
+        UserContributionPaginator ucp = new UserContributionPaginator(reddit,"submitted", "BelowSubway");
+        ucp.setLimit(500);
+        ucp.setTimePeriod(TimePeriod.WEEK);
+        ucp.setSorting(Sorting.NEW);
 
-        while (ssp.hasNext()) {
-            Listing<Submission> userSubmissions = ssp.next();
-            for (Submission sub : userSubmissions) {
-                if (sub.getUrl().equalsIgnoreCase(rss.getLink()) || sub.getTitle().equalsIgnoreCase(rss.getTitle())) {
+        while (ucp.hasNext()) {
+            Listing<Contribution> userContributions = ucp.next();
+            for (Contribution contribution : userContributions) {
+                String url = contribution.data("url").toString();
+                String title = contribution.data("title").toString();
+                if (url.equals(rss.getLink()) || title.equalsIgnoreCase(rss.getTitle())) {
                     log.info("Already posted by me: '" + rss.getTitle() + "'");
                     return true;
                 }
