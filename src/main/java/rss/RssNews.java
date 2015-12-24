@@ -6,6 +6,7 @@ import com.sun.syndication.io.FeedException;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public class RssNews {
 
             for (Object o : syndFeedForUrl.getEntries()) {
                 SyndEntryImpl entry = (SyndEntryImpl) o;
-                RssNewsEntry rssNewsEntry = new RssNewsEntry(entry.getTitle(), entry.getDescription().getValue(), entry.getLink(), entry.getPublishedDate());
+                RssNewsEntry rssNewsEntry = new RssNewsEntry(entry.getTitle(), entry.getDescription().getValue(), UrlHelper.getRedirectedUrl(new URL(entry.getLink())), entry.getPublishedDate());
                 rssNewsEntries.add(rssNewsEntry);
             }
             this.rssNewsEntires = rssNewsEntries;
