@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <config>
    <NewsConfig>
-        <filters>atheis</filters>
-        <filters>religion</filters>
-        <filters> evolution</filters>
-        <filters>muslim</filters>
-        <filters>christian</filters>
-        <id>Atheism News</id>
-        <rssFeedUrl>http://www.rawstory.com/rs/feed/</rssFeedUrl>
-        <subreddit>atheism</subreddit>
+       <filters>atheis</filters>
+       <filters>religion</filters>
+       <filters> evolution</filters>
+       <filters>muslim</filters>
+       <filters>christian</filters>
+       <filters> islam</filters>
+       <filters>evangelical</filters>
+       <filters> god</filters>
+       <id>Atheism News</id>
+       <rssFeedUrl>http://www.rawstory.com/rs/feed/</rssFeedUrl>
+       <subreddit>atheism</subreddit>
     </NewsConfig>
     <NewsConfig>
         <filters>fallout</filters>

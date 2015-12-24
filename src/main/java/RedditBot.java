@@ -9,6 +9,7 @@ import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubmissionSearchPaginator;
 import net.dean.jraw.paginators.SubredditPaginator;
 import net.dean.jraw.paginators.TimePeriod;
+import org.apache.log4j.Logger;
 import reddit.apiwrapper.RedditClientFactory;
 import rss.RssNews;
 import rss.RssNewsEntry;
@@ -22,6 +23,7 @@ import java.net.URL;
 import java.util.List;
 
 public class RedditBot {
+    final static Logger log = Logger.getLogger(RedditBot.class);
     RedditClient reddit;
     FluentRedditClient fluentReddit;
     Config config;
@@ -40,7 +42,8 @@ public class RedditBot {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             config = (Config) jaxbUnmarshaller.unmarshal(file);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            log.fatal("Error reading config");
+            log.fatal(e.getMessage());
         }
 
         return config;
@@ -48,6 +51,7 @@ public class RedditBot {
 
     public void start() throws ApiException {
         for (NewsConfig newsConfig : config.getNewsConfigs()) {
+            log.info("Working on '" + newsConfig.getId() + "'");
             RssNews rss = new RssNews(newsConfig.getRssFeedUrl());
             List<RssNewsEntry> filteredRssNewsEntries = rss.getFilteredRssNewsEntries(newsConfig.getFilters(), newsConfig.getMaxAge());
             postRssNews(filteredRssNewsEntries, newsConfig);
@@ -55,35 +59,30 @@ public class RedditBot {
     }
 
     private void postRssNews(List<RssNewsEntry> rssNews, NewsConfig newsConfig) {
-        System.out.println("Posting " + newsConfig.getId());
         int counter = 0;
         for (RssNewsEntry entry : rssNews) {
             try {
                 if (!hasEntryBeenPosted(entry, newsConfig)) {
                     fluentReddit.subreddit(newsConfig.getSubreddit()).submit(new URL(entry.getLink()), entry.getTitle());
-                    System.out.println("Posted: " + entry.getTitle() + ". Sleeping for a second.");
+                    log.info("Posted: " + entry.getTitle() + ". Sleeping for a minute.");
                     // Let's sleep a minute, maybe that will be enough to not trigger the posting limit
                     Thread.sleep(60*1000);
                     counter++;
-                } else {
-                    System.out.println("Duplicate found for " + entry.getTitle());
                 }
             } catch (ApiException e) {
-                e.printStackTrace();
-                System.out.println("Aborting...");
+                log.fatal("Aborting...");
+                log.fatal(e.getMessage());
                 return;
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                log.fatal(e.getMessage());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.fatal(e.getMessage());
             }
         }
-        System.out.println("Done posting " + counter + " new links");
+        log.info("Done posting " + counter + " new links");
     }
 
     private boolean hasEntryBeenPosted(RssNewsEntry rss, NewsConfig newsConfig) {
-        System.out.println("Checking " + rss.getLink() + " for duplicates");
-
         if (hasAlreadyPostedByMe(rss)) return true;
         if (hasAlreadyPostedBySomeone(rss, newsConfig)) return true;
 
@@ -101,6 +100,7 @@ public class RedditBot {
             Listing<Submission> submissions = paginator.next();
             for (Submission sub : submissions) {
                 if (sub.getUrl().equalsIgnoreCase(rss.getLink()) || sub.getTitle().equalsIgnoreCase(rss.getTitle())) {
+                    log.info("Already posted by someone else: '" + rss.getTitle() + "'");
                     return true;
                 }
             }
@@ -118,6 +118,7 @@ public class RedditBot {
             Listing<Submission> userSubmissions = ssp.next();
             for (Submission sub : userSubmissions) {
                 if (sub.getUrl().equalsIgnoreCase(rss.getLink()) || sub.getTitle().equalsIgnoreCase(rss.getTitle())) {
+                    log.info("Already posted by me: '" + rss.getTitle() + "'");
                     return true;
                 }
             }

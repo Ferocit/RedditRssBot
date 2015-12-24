@@ -7,6 +7,7 @@ import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
 import net.dean.jraw.http.oauth.OAuthHelper;
 import net.dean.jraw.models.LoggedInAccount;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,7 @@ import java.util.Properties;
  * Created by Mathias on 19.12.2015.
  */
 public class RedditClientFactory {
-
+    final static Logger log = Logger.getLogger(RedditClientFactory.class);
     public static RedditClient getRedditClient() {
         try {
             Properties properties = getProperties();
@@ -27,10 +28,10 @@ public class RedditClientFactory {
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
             redditClient.authenticate(authData);
             LoggedInAccount me = redditClient.me();
-            System.out.println("Logged in: " + me.getFullName());
+            log.info("Logged in: " + me.getFullName());
             return redditClient;
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            log.fatal(ex.getMessage());
         }
         return null;
     }

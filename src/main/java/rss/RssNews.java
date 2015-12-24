@@ -3,6 +3,7 @@ package rss;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public class RssNews {
+    final static Logger log = Logger.getLogger(RssNews.class);
     String rssUrl;
     List<RssNewsEntry> rssNewsEntires;
 
@@ -28,12 +30,13 @@ public class RssNews {
                 rssNewsEntries.add(rssNewsEntry);
             }
             this.rssNewsEntires = rssNewsEntries;
+            log.info("Read " + rssNewsEntries.size() + " articles from RSS.");
             return rssNewsEntries;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.fatal(e.getMessage());
         } catch (FeedException e) {
-            e.printStackTrace();
+            log.fatal(e.getMessage());
         }
 
         return null;
@@ -57,7 +60,6 @@ public class RssNews {
             }
         }
         return filteredList;
-
     }
 
     private boolean isOlderThanXDays(Date publishedDate, Integer maxAge) {

@@ -1,4 +1,5 @@
 /src/main/resources/credentials.properties
+redditbot.log
 
 ### Java template
 *.class
