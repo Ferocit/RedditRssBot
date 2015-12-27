@@ -35,8 +35,10 @@ public class RssNews {
             return rssNewsEntries;
 
         } catch (IOException e) {
+            log.fatal("IOException");
             log.fatal(e.getMessage());
         } catch (FeedException e) {
+            log.fatal("FeedException");
             log.fatal(e.getMessage());
         }
 

@@ -68,12 +68,14 @@ public class RedditBot {
                     counter++;
                 }
             } catch (ApiException e) {
-                log.fatal("Aborting...");
+                log.fatal("ApiException");
                 log.fatal(e.getMessage());
                 return;
             } catch (MalformedURLException e) {
+                log.fatal("MalformedURLException");
                 log.fatal(e.getMessage());
             } catch (InterruptedException e) {
+                log.fatal("InterruptedException");
                 log.fatal(e.getMessage());
             }
         }
