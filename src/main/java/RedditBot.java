@@ -6,7 +6,10 @@ import net.dean.jraw.fluent.FluentRedditClient;
 import net.dean.jraw.models.Contribution;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
-import net.dean.jraw.paginators.*;
+import net.dean.jraw.paginators.Sorting;
+import net.dean.jraw.paginators.SubmissionSearchPaginator;
+import net.dean.jraw.paginators.TimePeriod;
+import net.dean.jraw.paginators.UserContributionPaginator;
 import org.apache.log4j.Logger;
 import reddit.apiwrapper.RedditClientFactory;
 import rss.RssNews;
@@ -64,7 +67,7 @@ public class RedditBot {
                     fluentReddit.subreddit(newsConfig.getSubreddit()).submit(new URL(entry.getLink()), entry.getTitle());
                     log.info("Posted: " + entry.getTitle() + ". Sleeping for a minute.");
                     // Let's sleep a minute, maybe that will be enough to not trigger the posting limit
-                    Thread.sleep(60*1000);
+                    Thread.sleep(60 * 1000);
                     counter++;
                 }
             } catch (ApiException e) {
@@ -90,10 +93,11 @@ public class RedditBot {
     }
 
     private boolean hasAlreadyPostedBySomeone(RssNewsEntry rss, NewsConfig newsConfig) {
-        SubredditPaginator paginator = new SubredditPaginator(reddit);
-        paginator.setLimit(500);
-        paginator.setTimePeriod(TimePeriod.DAY);
-        paginator.setSorting(Sorting.NEW);
+
+        SubmissionSearchPaginator paginator = new SubmissionSearchPaginator(reddit, String.format("subreddit:%s url:%s", newsConfig.getSubreddit(), rss.getLink()));
+        paginator.setLimit(50);
+        paginator.setTimePeriod(TimePeriod.MONTH);
+        paginator.setSearchSorting(SubmissionSearchPaginator.SearchSort.NEW);
         paginator.setSubreddit(newsConfig.getSubreddit());
 
         while (paginator.hasNext()) {
@@ -109,8 +113,8 @@ public class RedditBot {
     }
 
     private boolean hasAlreadyPostedByMe(RssNewsEntry rss) {
-        UserContributionPaginator ucp = new UserContributionPaginator(reddit,"submitted", "BelowSubway");
-        ucp.setLimit(500);
+        UserContributionPaginator ucp = new UserContributionPaginator(reddit, "submitted", "BelowSubway");
+        ucp.setLimit(50);
         ucp.setTimePeriod(TimePeriod.WEEK);
         ucp.setSorting(Sorting.NEW);
 
