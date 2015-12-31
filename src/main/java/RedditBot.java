@@ -11,7 +11,7 @@ import net.dean.jraw.paginators.SubmissionSearchPaginator;
 import net.dean.jraw.paginators.TimePeriod;
 import net.dean.jraw.paginators.UserContributionPaginator;
 import org.apache.log4j.Logger;
-import reddit.apiwrapper.RedditClientFactory;
+import reddit.RedditClientFactory;
 import rss.RssNews;
 import rss.RssNewsEntry;
 
