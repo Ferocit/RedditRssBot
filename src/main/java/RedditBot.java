@@ -65,9 +65,7 @@ public class RedditBot {
             try {
                 if (!hasEntryBeenPosted(entry, newsConfig)) {
                     fluentReddit.subreddit(newsConfig.getSubreddit()).submit(new URL(entry.getLink()), entry.getTitle());
-                    log.info("Posted: " + entry.getTitle() + ". Sleeping for a minute.");
-                    // Let's sleep a minute, maybe that will be enough to not trigger the posting limit
-                    Thread.sleep(60 * 1000);
+                    log.info("Posted: " + entry.getTitle() + ".");
                     counter++;
                 }
             } catch (ApiException e) {
@@ -76,9 +74,6 @@ public class RedditBot {
                 return;
             } catch (MalformedURLException e) {
                 log.fatal("MalformedURLException");
-                log.fatal(e.getMessage());
-            } catch (InterruptedException e) {
-                log.fatal("InterruptedException");
                 log.fatal(e.getMessage());
             }
         }
