@@ -57,12 +57,23 @@ public class RssNews {
             for (RssNewsEntry entry : rssNewsEntires) {
                 if (!isOlderThanXDays(entry.getPublishedDate(), maxAge)) {
                     if (entry.getTitle().toLowerCase().contains(filter.toLowerCase())) {
-                        filteredList.add(entry);
+                        if (!listContainsEntryWithSameLink(filteredList, entry.getLink())) {
+                            filteredList.add(entry);
+                        }
                     }
                 }
             }
         }
         return filteredList;
+    }
+
+    private boolean listContainsEntryWithSameLink(List<RssNewsEntry> filteredList, String link) {
+        for (RssNewsEntry entry : filteredList) {
+            if (entry.getLink().equalsIgnoreCase(link)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isOlderThanXDays(Date publishedDate, Integer maxAge) {
