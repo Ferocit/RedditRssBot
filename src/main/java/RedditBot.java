@@ -12,6 +12,7 @@ import net.dean.jraw.paginators.TimePeriod;
 import net.dean.jraw.paginators.UserContributionPaginator;
 import org.apache.log4j.Logger;
 import reddit.RedditClientFactory;
+import reddit.RedditHelper;
 import rss.RssNews;
 import rss.RssNewsEntry;
 
@@ -81,49 +82,11 @@ public class RedditBot {
     }
 
     private boolean hasEntryBeenPosted(RssNewsEntry rss, NewsConfig newsConfig) {
-        if (hasAlreadyPostedByMe(rss)) return true;
-        if (hasAlreadyPostedBySomeone(rss, newsConfig)) return true;
+        if (RedditHelper.hasAlreadyPostedByMe(rss, reddit)) return true;
+        if (RedditHelper.hasAlreadyPostedBySomeone(rss, newsConfig, reddit)) return true;
 
         return false;
     }
 
-    private boolean hasAlreadyPostedBySomeone(RssNewsEntry rss, NewsConfig newsConfig) {
 
-        SubmissionSearchPaginator paginator = new SubmissionSearchPaginator(reddit, String.format("subreddit:%s url:%s", newsConfig.getSubreddit(), rss.getLink()));
-        paginator.setLimit(50);
-        paginator.setTimePeriod(TimePeriod.MONTH);
-        paginator.setSearchSorting(SubmissionSearchPaginator.SearchSort.NEW);
-        paginator.setSubreddit(newsConfig.getSubreddit());
-
-        while (paginator.hasNext()) {
-            Listing<Submission> submissions = paginator.next();
-            for (Submission sub : submissions) {
-                if (sub.getUrl().equalsIgnoreCase(rss.getLink()) || sub.getTitle().equalsIgnoreCase(rss.getTitle())) {
-                    log.info("Already posted by someone else: '" + rss.getTitle() + "'");
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean hasAlreadyPostedByMe(RssNewsEntry rss) {
-        UserContributionPaginator ucp = new UserContributionPaginator(reddit, "submitted", "BelowSubway");
-        ucp.setLimit(50);
-        ucp.setTimePeriod(TimePeriod.WEEK);
-        ucp.setSorting(Sorting.NEW);
-
-        while (ucp.hasNext()) {
-            Listing<Contribution> userContributions = ucp.next();
-            for (Contribution contribution : userContributions) {
-                String url = contribution.data("url").toString();
-                String title = contribution.data("title").toString();
-                if (url.equals(rss.getLink()) || title.equalsIgnoreCase(rss.getTitle())) {
-                    log.info("Already posted by me: '" + rss.getTitle() + "'");
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 }

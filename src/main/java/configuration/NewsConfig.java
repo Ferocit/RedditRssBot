@@ -13,6 +13,9 @@ public class NewsConfig {
     Integer maxAge;
 
     public Integer getMaxAge() {
+        if (maxAge == null) {
+            return 1;
+        }
         return maxAge;
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 public class RssNews {
     final static Logger log = Logger.getLogger(RssNews.class);
     String rssUrl;
-    List<RssNewsEntry> rssNewsEntires;
+    List<RssNewsEntry> rssNewsEntries;
 
     public RssNews(String rssUrl) {
         this.rssUrl = rssUrl;
@@ -27,10 +27,19 @@ public class RssNews {
 
             for (Object o : syndFeedForUrl.getEntries()) {
                 SyndEntryImpl entry = (SyndEntryImpl) o;
-                RssNewsEntry rssNewsEntry = new RssNewsEntry(entry.getTitle(), entry.getDescription().getValue(), UrlHelper.getRedirectedUrl(new URL(entry.getLink())), entry.getPublishedDate());
-                rssNewsEntries.add(rssNewsEntry);
+                if (entry != null) {
+                    String title = entry.getTitle();
+                    String descriptionValue = "";
+                    if (entry.getDescription() != null) {
+                        descriptionValue = entry.getDescription().getValue();
+                    }
+                    String link = entry.getLink();
+                    Date publishedDate = entry.getPublishedDate();
+                    RssNewsEntry rssNewsEntry = new RssNewsEntry(title, descriptionValue, UrlHelper.getRedirectedUrl(new URL(link)), publishedDate);
+                    rssNewsEntries.add(rssNewsEntry);
+                }
             }
-            this.rssNewsEntires = rssNewsEntries;
+            this.rssNewsEntries = rssNewsEntries;
             log.info("Read " + rssNewsEntries.size() + " articles from RSS.");
             return rssNewsEntries;
 
@@ -47,14 +56,19 @@ public class RssNews {
 
     public List<RssNewsEntry> getFilteredRssNewsEntries(List<String> filters, Integer maxAge) {
 
-        if (rssNewsEntires == null) {
+        if (rssNewsEntries == null) {
             this.getRssNewsEntries();
+        }
+
+        // If we don't have any filters, then I assume we just want everything
+        if (filters == null) {
+            return rssNewsEntries;
         }
 
         List<RssNewsEntry> filteredList = new ArrayList<RssNewsEntry>();
 
         for (String filter : filters) {
-            for (RssNewsEntry entry : rssNewsEntires) {
+            for (RssNewsEntry entry : rssNewsEntries) {
                 if (!isOlderThanXDays(entry.getPublishedDate(), maxAge)) {
                     if (entry.getTitle().toLowerCase().contains(filter.toLowerCase())) {
                         if (!listContainsEntryWithSameLink(filteredList, entry.getLink())) {
