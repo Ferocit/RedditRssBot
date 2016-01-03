@@ -50,7 +50,7 @@ public class RssNews {
             log.fatal("FeedException");
             log.fatal(e.getMessage());
         }
-
+        this.rssNewsEntries = rssNewsEntries;
         return rssNewsEntries;
     }
 
