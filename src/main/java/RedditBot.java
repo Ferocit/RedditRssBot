@@ -81,6 +81,7 @@ public class RedditBot {
         log.info("Done posting " + counter + " new links");
     }
 
+    // A test comment
     private boolean hasEntryBeenPosted(RssNewsEntry rss, NewsConfig newsConfig) {
         if (RedditHelper.hasAlreadyPostedByMe(rss, reddit)) return true;
         if (RedditHelper.hasAlreadyPostedBySomeone(rss, newsConfig, reddit)) return true;
