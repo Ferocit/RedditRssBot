@@ -21,9 +21,9 @@ public class RssNews {
     }
 
     public List<RssNewsEntry> getRssNewsEntries() {
+        List<RssNewsEntry> rssNewsEntries = new ArrayList<RssNewsEntry>();
         try {
             SyndFeed syndFeedForUrl = RomeHelper.getSyndFeedForUrl(rssUrl);
-            List<RssNewsEntry> rssNewsEntries = new ArrayList<RssNewsEntry>();
 
             for (Object o : syndFeedForUrl.getEntries()) {
                 SyndEntryImpl entry = (SyndEntryImpl) o;
@@ -51,7 +51,7 @@ public class RssNews {
             log.fatal(e.getMessage());
         }
 
-        return null;
+        return rssNewsEntries;
     }
 
     public List<RssNewsEntry> getFilteredRssNewsEntries(List<String> filters, Integer maxAge) {
