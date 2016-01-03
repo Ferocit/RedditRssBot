@@ -12,6 +12,12 @@ import java.net.URL;
 public class UrlHelper {
     final static Logger log = Logger.getLogger(UrlHelper.class);
 
+    public static String fixUrl(URL url) {
+        String link = getRedirectedUrl(url);
+        link = fixIntellijBlogUrl(link);
+        return link;
+    }
+
     public static String getRedirectedUrl(URL url) {
         HttpURLConnection con = null;
 
@@ -30,5 +36,15 @@ public class UrlHelper {
             log.fatal(e.getMessage());
         }
         return null;
+    }
+
+    public static String fixIntellijBlogUrl(String url) {
+        if (url.contains("http://blog.jetbrains.com/")) {
+            if (url.indexOf("?utm_source") > 0) {
+                return url.toString().substring(0, url.toString().indexOf("?utm_source"));
+            }
+        }
+
+        return url;
     }
 }

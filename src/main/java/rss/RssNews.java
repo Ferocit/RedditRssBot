@@ -35,7 +35,7 @@ public class RssNews {
                     }
                     String link = entry.getLink();
                     Date publishedDate = entry.getPublishedDate();
-                    RssNewsEntry rssNewsEntry = new RssNewsEntry(title, descriptionValue, UrlHelper.getRedirectedUrl(new URL(link)), publishedDate);
+                    RssNewsEntry rssNewsEntry = new RssNewsEntry(title, descriptionValue, UrlHelper.fixUrl(new URL(link)), publishedDate);
                     rssNewsEntries.add(rssNewsEntry);
                 }
             }
