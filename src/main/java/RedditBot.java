@@ -53,10 +53,12 @@ public class RedditBot {
 
     public void start() throws ApiException {
         for (NewsConfig newsConfig : config.getNewsConfigs()) {
-            log.info("Working on '" + newsConfig.getId() + "'");
-            RssNews rss = new RssNews(newsConfig.getRssFeedUrl());
-            List<RssNewsEntry> filteredRssNewsEntries = rss.getFilteredRssNewsEntries(newsConfig.getFilters(), newsConfig.getMaxAge());
-            postRssNews(filteredRssNewsEntries, newsConfig);
+            if (newsConfig.isActive()) {
+                log.info("Working on '" + newsConfig.getId() + "'");
+                RssNews rss = new RssNews(newsConfig.getRssFeedUrl());
+                List<RssNewsEntry> filteredRssNewsEntries = rss.getFilteredRssNewsEntries(newsConfig.getFilters(), newsConfig.getMaxAge());
+                postRssNews(filteredRssNewsEntries, newsConfig);
+            }
         }
     }
 

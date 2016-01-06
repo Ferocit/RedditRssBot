@@ -18,4 +18,7 @@ public class Config {
     public void setNewsConfigs(List<NewsConfig> newsConfigs) {
         this.newsConfigs = newsConfigs;
     }
+
+
+
 }

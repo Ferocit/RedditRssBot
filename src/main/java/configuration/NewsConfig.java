@@ -6,11 +6,25 @@ import java.util.List;
 
 @XmlRootElement
 public class NewsConfig {
+    @XmlElement
     String id;
+    @XmlElement
     String rssFeedUrl;
+    @XmlElement
     String subreddit;
+    @XmlElement
     List<String> filters;
+    @XmlElement
     Integer maxAge;
+    @XmlElement
+    Boolean active;
+
+    public Boolean isActive() {
+        if (active == null) {
+            return true;
+        }
+        return active;
+    }
 
     public Integer getMaxAge() {
         if (maxAge == null) {
@@ -19,44 +33,16 @@ public class NewsConfig {
         return maxAge;
     }
 
-    @XmlElement
-    public void setMaxAge(Integer maxAge) {
-        this.maxAge = maxAge;
-    }
-
     public String getId() {
         return id;
     }
-
-    @XmlElement
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getRssFeedUrl() {
         return rssFeedUrl;
     }
-
-    @XmlElement
-    public void setRssFeedUrl(String rssFeedUrl) {
-        this.rssFeedUrl = rssFeedUrl;
-    }
-
     public String getSubreddit() {
         return subreddit;
     }
-
-    @XmlElement
-    public void setSubreddit(String subreddit) {
-        this.subreddit = subreddit;
-    }
-
     public List<String> getFilters() {
         return filters;
-    }
-
-    @XmlElement
-    public void setFilters(List<String> filters) {
-        this.filters = filters;
     }
 }
