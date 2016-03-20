@@ -2,34 +2,9 @@
 <config>
     <NewsConfig>
         <filters></filters>
-        <id>Rocketbeans Blog</id>
-        <rssFeedUrl>http://www.rocketbeans.tv/blog/feed/</rssFeedUrl>
-        <subreddit>Rocketbeans</subreddit>
+        <id>Some name</id>
+        <rssFeedUrl>http://.../feed/</rssFeedUrl>
+        <subreddit>Worldnews</subreddit>
         <maxAge>1</maxAge>
     </NewsConfig>
-    <NewsConfig>
-        <filters></filters>
-        <id>IntelliJ IDEA</id>
-        <rssFeedUrl>http://feeds2.feedburner.com/jetbrains_intellijidea</rssFeedUrl>
-        <subreddit>IntelliJIdea</subreddit>
-        <maxAge>2</maxAge>
-    </NewsConfig>
-    <NewsConfig>
-        <filters></filters>
-        <id>Rimworld Test</id>
-        <rssFeedUrl>https://ludeon.com/blog/feed/</rssFeedUrl>
-        <subreddit>Rimworld</subreddit>
-        <maxAge>1</maxAge>
-    </NewsConfig>
-    <NewsConfig>
-        <filters>iPhone</filters>
-        <filters>iOS</filters>
-        <id>iPhone Techspot</id>
-        <rssFeedUrl>http://www.techspot.com/backend.xml</rssFeedUrl>
-        <subreddit>iphone</subreddit>
-        <maxAge>7</maxAge>
-    </NewsConfig>
-
-
-    <!-- News4AtheistsBotTest -->
 </config>
