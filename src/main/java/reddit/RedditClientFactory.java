@@ -20,7 +20,7 @@ public class RedditClientFactory {
         try {
             Properties properties = getProperties();
 
-            UserAgent myUserAgent = UserAgent.of("Windows", "RedditAtheismNews", "0.1", "Feroc");
+            UserAgent myUserAgent = UserAgent.of("Windows", "RedditNewsBot", "0.1", "Feroc");
             RedditClient redditClient = new RedditClient(myUserAgent);
             Credentials credentials = Credentials.script(properties.getProperty("user"), properties.getProperty("password"), properties.getProperty("app_id"), properties.getProperty("app_secret"));
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
