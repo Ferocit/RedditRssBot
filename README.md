@@ -1,4 +1,4 @@
-### Reddit RSS Bot
+# Reddit RSS Bot
 
 ## About
 
